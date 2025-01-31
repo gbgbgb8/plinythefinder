@@ -26,11 +26,11 @@
                             <input type="hidden" name="form-name" value="pliny-sighting" />
                             <div class="mb-3">
                                 <label for="sightingLocation" class="form-label">Location (Pub/Restaurant Name)</label>
-                                <input type="text" class="form-control" id="sightingLocation" required>
+                                <input type="text" class="form-control" id="sightingLocation" name="location" required>
                             </div>
                             <div class="mb-3">
                                 <label for="sightingDate" class="form-label">Date Seen</label>
-                                <input type="date" class="form-control" id="sightingDate" required>
+                                <input type="date" class="form-control" id="sightingDate" name="date" required>
                             </div>
                             <button type="submit" class="btn btn-success">Report Sighting</button>
                         </form>
@@ -48,15 +48,15 @@
                             <input type="hidden" name="form-name" value="pliny-rumor" />
                             <div class="mb-3">
                                 <label for="rumorLocation" class="form-label">Expected Location</label>
-                                <input type="text" class="form-control" id="rumorLocation" required>
+                                <input type="text" class="form-control" id="rumorLocation" name="location" required>
                             </div>
                             <div class="mb-3">
                                 <label for="rumorStartDate" class="form-label">Expected Start Date</label>
-                                <input type="date" class="form-control" id="rumorStartDate" required>
+                                <input type="date" class="form-control" id="rumorStartDate" name="startDate" required>
                             </div>
                             <div class="mb-3">
                                 <label for="rumorEndDate" class="form-label">Expected End Date</label>
-                                <input type="date" class="form-control" id="rumorEndDate" required>
+                                <input type="date" class="form-control" id="rumorEndDate" name="endDate" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Report Rumor</button>
                         </form>
