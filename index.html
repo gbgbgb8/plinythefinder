@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pliny the Finder - Track Pliny the Younger Sightings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="text-center my-5">
+            <h1><i class="fas fa-beer"></i> Pliny the Finder</h1>
+            <p class="lead">Track and share Pliny the Younger sightings and rumors</p>
+        </header>
+
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0"><i class="fas fa-eye"></i> Report a Sighting</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="sightingForm" name="pliny-sighting" method="POST" data-netlify="true">
+                            <input type="hidden" name="form-name" value="pliny-sighting" />
+                            <div class="mb-3">
+                                <label for="sightingLocation" class="form-label">Location (Pub/Restaurant Name)</label>
+                                <input type="text" class="form-control" id="sightingLocation" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sightingDate" class="form-label">Date Seen</label>
+                                <input type="date" class="form-control" id="sightingDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Report Sighting</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0"><i class="fas fa-whispers"></i> Report a Rumor</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="rumorForm" name="pliny-rumor" method="POST" data-netlify="true">
+                            <input type="hidden" name="form-name" value="pliny-rumor" />
+                            <div class="mb-3">
+                                <label for="rumorLocation" class="form-label">Expected Location</label>
+                                <input type="text" class="form-control" id="rumorLocation" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rumorStartDate" class="form-label">Expected Start Date</label>
+                                <input type="date" class="form-control" id="rumorStartDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rumorEndDate" class="form-label">Expected End Date</label>
+                                <input type="date" class="form-control" id="rumorEndDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Report Rumor</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title mb-0">Recent Sightings</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="sightingsList" class="list-group">
+                            <!-- Sightings will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">Current Rumors</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="rumorsList" class="list-group">
+                            <!-- Rumors will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
