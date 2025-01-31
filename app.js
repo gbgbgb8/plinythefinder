@@ -1,92 +1,91 @@
-// Initialize data storage
-let sightings = JSON.parse(localStorage.getItem('sightings')) || [];
-let rumors = JSON.parse(localStorage.getItem('rumors')) || [];
-
 // Form elements
 const sightingForm = document.getElementById('sightingForm');
 const rumorForm = document.getElementById('rumorForm');
 const sightingsList = document.getElementById('sightingsList');
 const rumorsList = document.getElementById('rumorsList');
 
+// Fetch and display sightings
+async function fetchAndDisplaySightings() {
+    try {
+        const response = await fetch('/.netlify/functions/getSightings');
+        const sightings = await response.json();
+        displaySightings(sightings);
+    } catch (error) {
+        console.error('Error fetching sightings:', error);
+        sightingsList.innerHTML = '<div class="list-group-item text-danger">Error loading sightings</div>';
+    }
+}
+
+// Fetch and display rumors
+async function fetchAndDisplayRumors() {
+    try {
+        const response = await fetch('/.netlify/functions/getRumors');
+        const rumors = await response.json();
+        displayRumors(rumors);
+    } catch (error) {
+        console.error('Error fetching rumors:', error);
+        rumorsList.innerHTML = '<div class="list-group-item text-danger">Error loading rumors</div>';
+    }
+}
+
 // Handle sighting form submission
-sightingForm.addEventListener('submit', (e) => {
+sightingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const location = document.getElementById('sightingLocation').value;
     const date = document.getElementById('sightingDate').value;
     
-    const sighting = {
-        location,
-        date,
-        reportedAt: new Date().toISOString()
-    };
-    
-    // Submit to Netlify
-    fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-            "form-name": "pliny-sighting",
-            location: location,
-            date: date,
-            reportedAt: new Date().toISOString()
-        }).toString()
-    })
-    .then(() => {
-        // Store locally for display
-        sightings.unshift(sighting);
-        localStorage.setItem('sightings', JSON.stringify(sightings));
-        displaySightings();
+    try {
+        await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+                "form-name": "pliny-sighting",
+                location: location,
+                date: date,
+                reportedAt: new Date().toISOString()
+            }).toString()
+        });
+        
         sightingForm.reset();
-    })
-    .catch(error => {
+        await fetchAndDisplaySightings();
+    } catch (error) {
         console.error("Error submitting form:", error);
         alert("There was an error submitting your sighting. Please try again.");
-    });
+    }
 });
 
 // Handle rumor form submission
-rumorForm.addEventListener('submit', (e) => {
+rumorForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const location = document.getElementById('rumorLocation').value;
     const startDate = document.getElementById('rumorStartDate').value;
     const endDate = document.getElementById('rumorEndDate').value;
     
-    const rumor = {
-        location,
-        startDate,
-        endDate,
-        reportedAt: new Date().toISOString()
-    };
-    
-    // Submit to Netlify
-    fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-            "form-name": "pliny-rumor",
-            location: location,
-            startDate: startDate,
-            endDate: endDate,
-            reportedAt: new Date().toISOString()
-        }).toString()
-    })
-    .then(() => {
-        // Store locally for display
-        rumors.unshift(rumor);
-        localStorage.setItem('rumors', JSON.stringify(rumors));
-        displayRumors();
+    try {
+        await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+                "form-name": "pliny-rumor",
+                location: location,
+                startDate: startDate,
+                endDate: endDate,
+                reportedAt: new Date().toISOString()
+            }).toString()
+        });
+        
         rumorForm.reset();
-    })
-    .catch(error => {
+        await fetchAndDisplayRumors();
+    } catch (error) {
         console.error("Error submitting form:", error);
         alert("There was an error submitting your rumor. Please try again.");
-    });
+    }
 });
 
 // Display sightings
-function displaySightings() {
+function displaySightings(sightings) {
     sightingsList.innerHTML = '';
     
     sightings.forEach((sighting, index) => {
@@ -112,12 +111,8 @@ function displaySightings() {
 }
 
 // Display rumors
-function displayRumors() {
+function displayRumors(rumors) {
     rumorsList.innerHTML = '';
-    
-    // Filter out expired rumors
-    rumors = rumors.filter(rumor => new Date(rumor.endDate) >= new Date());
-    localStorage.setItem('rumors', JSON.stringify(rumors));
     
     rumors.forEach((rumor, index) => {
         if (index >= 10) return; // Only show last 10 active rumors
@@ -142,10 +137,6 @@ function displayRumors() {
     }
 }
 
-// Initial display
-displaySightings();
-displayRumors();
-
 // Validate date inputs
 document.getElementById('rumorStartDate').addEventListener('change', function() {
     document.getElementById('rumorEndDate').min = this.value;
@@ -153,4 +144,14 @@ document.getElementById('rumorStartDate').addEventListener('change', function() 
 
 document.getElementById('rumorEndDate').addEventListener('change', function() {
     document.getElementById('rumorStartDate').max = this.value;
-}); 
+});
+
+// Initial fetch and display
+fetchAndDisplaySightings();
+fetchAndDisplayRumors();
+
+// Refresh data every 5 minutes
+setInterval(() => {
+    fetchAndDisplaySightings();
+    fetchAndDisplayRumors();
+}, 5 * 60 * 1000); 
